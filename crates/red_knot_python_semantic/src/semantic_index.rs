@@ -166,7 +166,7 @@ impl<'db> SemanticIndex<'db> {
         &self.scopes[id]
     }
 
-    pub(crate) fn scope_ids(&self) -> impl Iterator<Item = ScopeId> {
+    pub fn scope_ids(&self) -> impl Iterator<Item = ScopeId> {
         self.scope_ids_by_scope.iter().copied()
     }
 
