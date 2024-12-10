@@ -9,9 +9,10 @@ use ruff_python_ast as ast;
 pub(crate) use self::builder::{IntersectionBuilder, UnionBuilder};
 pub use self::diagnostic::{TypeCheckDiagnostic, TypeCheckDiagnostics};
 pub(crate) use self::display::TypeArrayDisplay;
-pub use self::infer::{
-    infer_deferred_types, infer_definition_types, infer_expression_types, infer_scope_types,
+pub(crate) use self::infer::{
+    infer_deferred_types, infer_definition_types, infer_expression_types,
 };
+pub use self::infer::infer_scope_types;
 pub(crate) use self::signatures::Signature;
 use crate::module_resolver::file_to_module;
 use crate::semantic_index::ast_ids::HasScopedExpressionId;
