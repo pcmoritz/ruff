@@ -85,7 +85,7 @@ pub(crate) fn global_scope(db: &dyn Db, file: File) -> ScopeId<'_> {
 
 /// The symbol tables and use-def maps for all scopes in a file.
 #[derive(Debug)]
-pub(crate) struct SemanticIndex<'db> {
+pub struct SemanticIndex<'db> {
     /// List of all symbol tables in this file, indexed by scope.
     symbol_tables: IndexVec<FileScopeId, Arc<SymbolTable>>,
 
