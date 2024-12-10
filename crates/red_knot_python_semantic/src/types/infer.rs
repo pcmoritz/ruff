@@ -203,7 +203,7 @@ pub(crate) enum InferenceRegion<'db> {
 
 /// The inferred types for a single region.
 #[derive(Debug, Eq, PartialEq)]
-pub(crate) struct TypeInference<'db> {
+pub struct TypeInference<'db> {
     /// The types of every expression in this region.
     expressions: FxHashMap<ScopedExpressionId, Type<'db>>,
 
