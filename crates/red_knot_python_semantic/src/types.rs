@@ -3054,7 +3054,7 @@ impl<'db> SubclassOfType<'db> {
 /// A type representing the set of runtime objects which are instances of a certain class.
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash, salsa::Update)]
 pub struct InstanceType<'db> {
-    class: Class<'db>,
+    pub class: Class<'db>,
 }
 
 impl<'db> InstanceType<'db> {
