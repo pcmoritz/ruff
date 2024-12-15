@@ -66,7 +66,7 @@ pub fn symbol_table<'db>(db: &'db dyn Db, scope: ScopeId<'db>) -> Arc<SymbolTabl
 /// Salsa can avoid invalidating dependent queries if this scope's use-def map
 /// is unchanged.
 #[salsa::tracked]
-pub(crate) fn use_def_map<'db>(db: &'db dyn Db, scope: ScopeId<'db>) -> Arc<UseDefMap<'db>> {
+pub fn use_def_map<'db>(db: &'db dyn Db, scope: ScopeId<'db>) -> Arc<UseDefMap<'db>> {
     let file = scope.file(db);
     let _span =
         tracing::trace_span!("use_def_map", scope=?scope.as_id(), file=%file.path(db)).entered();
@@ -77,7 +77,7 @@ pub(crate) fn use_def_map<'db>(db: &'db dyn Db, scope: ScopeId<'db>) -> Arc<UseD
 
 /// Returns the module global scope of `file`.
 #[salsa::tracked]
-pub(crate) fn global_scope(db: &dyn Db, file: File) -> ScopeId<'_> {
+pub fn global_scope(db: &dyn Db, file: File) -> ScopeId<'_> {
     let _span = tracing::trace_span!("global_scope", file = %file.path(db)).entered();
 
     FileScopeId::global().to_scope_id(db, file)
