@@ -146,7 +146,7 @@ impl<'db> SemanticIndex<'db> {
 
     /// Returns the ID of the `expression`'s enclosing scope.
     #[track_caller]
-    pub(crate) fn expression_scope_id(
+    pub fn expression_scope_id(
         &self,
         expression: impl Into<ExpressionNodeKey>,
     ) -> FileScopeId {
