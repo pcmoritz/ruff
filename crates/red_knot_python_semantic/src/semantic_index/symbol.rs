@@ -242,7 +242,7 @@ impl SymbolTable {
     }
 
     /// Returns the symbol named `name`.
-    pub(crate) fn symbol_by_name(&self, name: &str) -> Option<&Symbol> {
+    pub fn symbol_by_name(&self, name: &str) -> Option<&Symbol> {
         let id = self.symbol_id_by_name(name)?;
         Some(self.symbol(id))
     }
