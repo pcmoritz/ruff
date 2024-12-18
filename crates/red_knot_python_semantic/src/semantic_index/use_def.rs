@@ -283,7 +283,7 @@ impl<'db> UseDefMap<'db> {
         }
     }
 
-    pub(crate) fn public_bindings(
+    pub fn public_bindings(
         &self,
         symbol: ScopedSymbolId,
     ) -> BindingWithConstraintsIterator<'_, 'db> {
