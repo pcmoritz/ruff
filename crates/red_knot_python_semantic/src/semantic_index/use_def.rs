@@ -239,7 +239,7 @@ mod symbol_state;
 
 /// Applicable definitions and constraints for every use of a name.
 #[derive(Debug, PartialEq, Eq)]
-pub(crate) struct UseDefMap<'db> {
+pub struct UseDefMap<'db> {
     /// Array of [`Definition`] in this scope.
     all_definitions: IndexVec<ScopedDefinitionId, Definition<'db>>,
 
