@@ -248,7 +248,7 @@ impl SymbolTable {
     }
 
     /// Returns the [`ScopedSymbolId`] of the symbol named `name`.
-    pub(crate) fn symbol_id_by_name(&self, name: &str) -> Option<ScopedSymbolId> {
+    pub fn symbol_id_by_name(&self, name: &str) -> Option<ScopedSymbolId> {
         let (id, ()) = self
             .symbols_by_name
             .raw_entry()
