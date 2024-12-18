@@ -126,7 +126,7 @@ impl<'db> SemanticIndex<'db> {
     /// Use the Salsa cached [`symbol_table()`] query if you only need the
     /// symbol table for a single scope.
     #[track_caller]
-    pub(super) fn symbol_table(&self, scope_id: FileScopeId) -> Arc<SymbolTable> {
+    fn symbol_table(&self, scope_id: FileScopeId) -> Arc<SymbolTable> {
         self.symbol_tables[scope_id].clone()
     }
 
