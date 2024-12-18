@@ -323,7 +323,7 @@ impl<'db> UseDefMap<'db> {
         }
     }
 
-    pub(crate) fn public_declarations(
+    pub fn public_declarations(
         &self,
         symbol: ScopedSymbolId,
     ) -> DeclarationsIterator<'_, 'db> {
