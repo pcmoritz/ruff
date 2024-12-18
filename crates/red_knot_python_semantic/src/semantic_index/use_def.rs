@@ -412,7 +412,7 @@ impl<'db> Iterator for ConstraintsIterator<'_, 'db> {
 
 impl std::iter::FusedIterator for ConstraintsIterator<'_, '_> {}
 
-pub(crate) struct DeclarationsIterator<'map, 'db> {
+pub struct DeclarationsIterator<'map, 'db> {
     all_definitions: &'map IndexVec<ScopedDefinitionId, Definition<'db>>,
     inner: DeclarationIdIterator<'map>,
     may_be_undeclared: bool,
