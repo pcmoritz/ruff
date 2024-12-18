@@ -156,7 +156,7 @@ impl<'db> SemanticIndex<'db> {
     /// Returns the [`Scope`] of the `expression`'s enclosing scope.
     #[allow(unused)]
     #[track_caller]
-    pub(crate) fn expression_scope(&self, expression: impl Into<ExpressionNodeKey>) -> &Scope {
+    pub fn expression_scope(&self, expression: impl Into<ExpressionNodeKey>) -> &Scope {
         &self.scopes[self.expression_scope_id(expression)]
     }
 
