@@ -27,6 +27,10 @@ impl<'db> SemanticModel<'db> {
         self.db
     }
 
+    pub fn file(&self) -> File {
+        self.file
+    }
+
     pub fn file_path(&self) -> &FilePath {
         self.file.path(self.db)
     }
