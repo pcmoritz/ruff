@@ -391,7 +391,7 @@ impl<'map, 'db> Iterator for BindingWithConstraintsIterator<'map, 'db> {
 impl std::iter::FusedIterator for BindingWithConstraintsIterator<'_, '_> {}
 
 pub struct BindingWithConstraints<'map, 'db> {
-    pub(crate) binding: Definition<'db>,
+    pub binding: Definition<'db>,
     pub(crate) constraints: ConstraintsIterator<'map, 'db>,
 }
 
