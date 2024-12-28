@@ -171,7 +171,7 @@ impl<'db> SemanticIndex<'db> {
     }
 
     /// Returns the id of the parent scope.
-    pub(crate) fn parent_scope_id(&self, scope_id: FileScopeId) -> Option<FileScopeId> {
+    pub fn parent_scope_id(&self, scope_id: FileScopeId) -> Option<FileScopeId> {
         let scope = self.scope(scope_id);
         scope.parent
     }
