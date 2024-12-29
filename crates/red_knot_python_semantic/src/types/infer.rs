@@ -4776,7 +4776,7 @@ impl<'db> TypeInferenceBuilder<'db> {
             }
             _ => {
                 self.infer_type_expression(slice);
-                todo_type!("generics")
+                todo_type!(format!("generics: {:?}", value_ty))
             }
         }
     }
