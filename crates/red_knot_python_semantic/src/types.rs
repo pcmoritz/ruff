@@ -3525,8 +3525,8 @@ pub(super) struct MetaclassCandidate<'db> {
 /// A singleton type representing a single class object at runtime.
 #[salsa::interned]
 pub struct ClassLiteralType<'db> {
-    class: Class<'db>,
-    args: Box<[Type<'db>]>,
+    pub class: Class<'db>,
+    pub args: Box<[Type<'db>]>,
 }
 
 impl<'db> ClassLiteralType<'db> {
