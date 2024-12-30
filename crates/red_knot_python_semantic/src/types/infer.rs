@@ -4785,7 +4785,7 @@ impl<'db> TypeInferenceBuilder<'db> {
             ast::Expr::Tuple(tuple) => {
                 let tuple_ty = self.infer_tuple_expression(tuple);
                 println!("XXX tuple_ty: {tuple_ty:?}");
-                Type::Unknown
+                tuple_ty
             }
             ast::Expr::Slice(slice) => {
                 self.infer_slice_expression(slice);
