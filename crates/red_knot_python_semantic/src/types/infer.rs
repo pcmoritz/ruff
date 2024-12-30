@@ -4961,9 +4961,19 @@ impl<'db> TypeInferenceBuilder<'db> {
             _ => {
                 println!("value_ty: {value_ty:?}");
                 println!("slice: {slice:?}");
-                let ty = self.infer_type_expression(slice);
-                println!("ty: {ty:?}");
-                todo_type!("generics")
+                let tuple_ty = self.infer_type_expression(slice);
+                println!("tuple_ty: {tuple_ty:?}");
+                match tuple_ty {
+                    Type::Tuple(tuple_ty) => {
+                        match value_ty {
+                            Type::ClassLiteral(class_literal) => {
+                                Type::ClassLiteral(ClassLiteralType::new(self.db(), class_literal.class(self.db()), tuple_ty.elements(self.db())))
+                            }
+                            _ => todo_type!("generics"),
+                        }
+                    }
+                    _ => todo_type!("generics"),
+                }
             }
         }
     }
