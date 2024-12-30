@@ -58,11 +58,11 @@ pub(super) fn check_class_slots(context: &InferContext, class: Class, node: &ast
     let mut found_second = false;
 
     for (index, base) in class.explicit_bases(db).iter().enumerate() {
-        let Type::ClassLiteral(ClassLiteralType { class: base }) = base else {
+        let Type::ClassLiteral(class_literal) = base else {
             continue;
         };
 
-        let solid_base = base.iter_mro(db).find_map(|current| {
+        let solid_base = class_literal.class(db).iter_mro(db).find_map(|current| {
             let ClassBase::Class(current) = current else {
                 return None;
             };

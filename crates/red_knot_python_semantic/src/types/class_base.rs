@@ -1,5 +1,5 @@
 use crate::types::{
-    todo_type, Class, ClassLiteralType, KnownClass, KnownInstanceType, TodoType, Type,
+    todo_type, Class, KnownClass, KnownInstanceType, TodoType, Type,
 };
 use crate::Db;
 use itertools::Either;
@@ -43,8 +43,8 @@ impl<'db> ClassBase<'db> {
         KnownClass::Object
             .to_class_literal(db)
             .into_class_literal()
-            .map_or(Self::Unknown, |ClassLiteralType { class }| {
-                Self::Class(class)
+            .map_or(Self::Unknown, |class_literal| {
+                Self::Class(class_literal.class(db))
             })
     }
 
@@ -56,7 +56,7 @@ impl<'db> ClassBase<'db> {
             Type::Any => Some(Self::Any),
             Type::Unknown => Some(Self::Unknown),
             Type::Todo(todo) => Some(Self::Todo(todo)),
-            Type::ClassLiteral(ClassLiteralType { class }) => Some(Self::Class(class)),
+            Type::ClassLiteral(class_literal) => Some(Self::Class(class_literal.class(db))),
             Type::Union(_) => None, // TODO -- forces consideration of multiple possible MROs?
             Type::Intersection(_) => None, // TODO -- probably incorrect?
             Type::Instance(_) => None, // TODO -- handle `__mro_entries__`?
@@ -167,19 +167,23 @@ impl<'db> From<Class<'db>> for ClassBase<'db> {
     }
 }
 
-impl<'db> From<ClassBase<'db>> for Type<'db> {
-    fn from(value: ClassBase<'db>) -> Self {
-        match value {
+pub(crate) trait IntoType<'db> {
+    fn into_type(self, db: &'db dyn Db) -> Type<'db>;
+}
+
+impl<'db> IntoType<'db> for ClassBase<'db> {
+    fn into_type(self, db: &'db dyn Db) -> Type<'db> {
+        match self {
             ClassBase::Any => Type::Any,
             ClassBase::Todo(todo) => Type::Todo(todo),
             ClassBase::Unknown => Type::Unknown,
-            ClassBase::Class(class) => Type::class_literal(class),
+            ClassBase::Class(class) => Type::class_literal(db, class),
         }
     }
 }
 
-impl<'db> From<&ClassBase<'db>> for Type<'db> {
-    fn from(value: &ClassBase<'db>) -> Self {
-        Self::from(*value)
+impl<'db> IntoType<'db> for &ClassBase<'db> {
+    fn into_type(self, db: &'db dyn Db) -> Type<'db> {
+        self.into_type(db)
     }
 }

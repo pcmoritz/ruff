@@ -791,10 +791,13 @@ pub(super) fn report_invalid_assignment(
     assigned_ty: Type,
 ) {
     match declared_ty {
-        Type::ClassLiteral(ClassLiteralType { class }) => {
-            context.report_lint(&INVALID_ASSIGNMENT, node, format_args!(
+        Type::ClassLiteral(class_literal) => {
+            context.report_lint(
+                &INVALID_ASSIGNMENT,
+                node,
+                format_args!(
                     "Implicit shadowing of class `{}`; annotate to make it explicit if this is intentional",
-                    class.name(context.db())));
+                    class_literal.class(context.db()).name(context.db())));
         }
         Type::FunctionLiteral(function) => {
             context.report_lint(&INVALID_ASSIGNMENT, node, format_args!(

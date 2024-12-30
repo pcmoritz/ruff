@@ -83,7 +83,7 @@ impl Display for DisplayRepresentation<'_> {
                 write!(f, "<module '{}'>", module.module(self.db).name())
             }
             // TODO functions and classes should display using a fully qualified name
-            Type::ClassLiteral(ClassLiteralType { class }) => f.write_str(class.name(self.db)),
+            Type::ClassLiteral(class_literal) => f.write_str(class_literal.class(self.db).name(self.db)),
             Type::SubclassOf(SubclassOfType {
                 base: ClassBase::Class(class),
             }) => {

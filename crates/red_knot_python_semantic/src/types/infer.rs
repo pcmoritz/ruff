@@ -540,7 +540,7 @@ impl<'db> TypeInferenceBuilder<'db> {
             .filter_map(|(definition, ty)| {
                 // Filter out class literals that result from imports
                 if let DefinitionKind::Class(class) = definition.kind(self.db()) {
-                    ty.into_class_literal().map(|ty| (ty.class, class.node()))
+                    ty.into_class_literal().map(|ty| (ty.class(self.db()), class.node()))
                 } else {
                     None
                 }
@@ -567,11 +567,11 @@ impl<'db> TypeInferenceBuilder<'db> {
             // (2) Check for classes that inherit from `@final` classes
             for (i, base_class) in class.explicit_bases(self.db()).iter().enumerate() {
                 // dynamic/unknown bases are never `@final`
-                let Some(ClassLiteralType { class: base_class }) = base_class.into_class_literal()
+                let Some(class_literal) = base_class.into_class_literal()
                 else {
                     continue;
                 };
-                if !base_class.is_final(self.db()) {
+                if !class_literal.class(self.db()).is_final(self.db()) {
                     continue;
                 }
                 self.context.report_lint(
@@ -580,7 +580,7 @@ impl<'db> TypeInferenceBuilder<'db> {
                     format_args!(
                         "Class `{}` cannot inherit from final class `{}`",
                         class.name(self.db()),
-                        base_class.name(self.db()),
+                        class_literal.class(self.db()).name(self.db()),
                     ),
                 );
             }
@@ -1267,7 +1267,7 @@ impl<'db> TypeInferenceBuilder<'db> {
         let maybe_known_class = KnownClass::try_from_file_and_name(self.db(), self.file(), name);
 
         let class = Class::new(self.db(), &name.id, body_scope, maybe_known_class);
-        let class_ty = Type::class_literal(class);
+        let class_ty = Type::class_literal(self.db(), class);
 
         self.add_declaration_with_binding(class_node.into(), definition, class_ty, class_ty);
 
@@ -4409,7 +4409,10 @@ impl<'db> TypeInferenceBuilder<'db> {
                         }
                     }
 
-                    if matches!(value_ty, Type::ClassLiteral(ClassLiteralType { class }) if class.is_known(self.db(), KnownClass::Type))
+                    if matches!(
+                        value_ty,
+                        Type::ClassLiteral(class_literal) if class_literal.class(self.db()).is_known(self.db(), KnownClass::Type)
+                    )
                     {
                         return KnownClass::GenericAlias.to_instance(self.db());
                     }
@@ -4668,7 +4671,7 @@ impl<'db> TypeInferenceBuilder<'db> {
 
                 match value_ty {
                     Type::ClassLiteral(class_literal_ty) => {
-                        match class_literal_ty.class.known(self.db()) {
+                        match class_literal_ty.class(self.db()).known(self.db()) {
                             Some(KnownClass::Tuple) => self.infer_tuple_type_expression(slice),
                             Some(KnownClass::Type) => self.infer_subclass_of_type_expression(slice),
                             _ => self.infer_subscript_type_expression(subscript, value_ty),
@@ -4871,7 +4874,7 @@ impl<'db> TypeInferenceBuilder<'db> {
             ast::Expr::Name(_) | ast::Expr::Attribute(_) => {
                 let name_ty = self.infer_expression(slice);
                 match name_ty {
-                    Type::ClassLiteral(ClassLiteralType { class }) => Type::subclass_of(class),
+                    Type::ClassLiteral(class_literal) => Type::subclass_of(class_literal.class(self.db())),
                     Type::KnownInstance(KnownInstanceType::Any) => {
                         Type::subclass_of_base(ClassBase::Any)
                     }
@@ -5889,7 +5892,7 @@ mod tests {
         let ty = global_symbol(&db, file, "C").expect_type();
         let base = ty
             .expect_class_literal()
-            .class
+            .class(&db)
             .iter_mro(&db)
             .nth(1)
             .unwrap();

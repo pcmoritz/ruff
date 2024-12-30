@@ -383,7 +383,7 @@ impl<'db> NarrowingConstraintsBuilder<'db> {
 
                     if callable_ty
                         .into_class_literal()
-                        .is_some_and(|c| c.class.is_known(self.db, KnownClass::Type))
+                        .is_some_and(|c| c.class(self.db).is_known(self.db, KnownClass::Type))
                     {
                         let symbol = self
                             .symbols()
@@ -432,12 +432,12 @@ impl<'db> NarrowingConstraintsBuilder<'db> {
                 let to_constraint = match function {
                     KnownConstraintFunction::IsInstance => {
                         |db: &'db dyn Db, class_literal: ClassLiteralType<'db>| {
-                            Type::instance(db, class_literal.class)
+                            Type::instance(db, class_literal.class(db))
                         }
                     }
                     KnownConstraintFunction::IsSubclass => {
-                        |_db: &'db dyn Db, class_literal: ClassLiteralType<'db>| {
-                            Type::subclass_of(class_literal.class)
+                        |db: &'db dyn Db, class_literal: ClassLiteralType<'db>| {
+                            Type::subclass_of(class_literal.class(db))
                         }
                     }
                 };
@@ -454,7 +454,7 @@ impl<'db> NarrowingConstraintsBuilder<'db> {
             Type::ClassLiteral(class_type)
                 if expr_call.arguments.args.len() == 1
                     && expr_call.arguments.keywords.is_empty()
-                    && class_type.class.is_known(self.db, KnownClass::Bool) =>
+                    && class_type.class(self.db).is_known(self.db, KnownClass::Bool) =>
             {
                 self.evaluate_expression_node_constraint(
                     &expr_call.arguments.args[0],
