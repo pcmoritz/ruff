@@ -3570,8 +3570,8 @@ impl<'db> SubclassOfType<'db> {
 /// A type representing the set of runtime objects which are instances of a certain class.
 #[salsa::interned]
 pub struct InstanceType<'db> {
-    class: Class<'db>,
-    args: Box<[Type<'db>]>,
+    pub class: Class<'db>,
+    pub args: Box<[Type<'db>]>,
 }
 
 impl<'db> InstanceType<'db> {
