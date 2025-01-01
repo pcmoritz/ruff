@@ -4975,7 +4975,10 @@ impl<'db> TypeInferenceBuilder<'db> {
                             }
                         }
                     }
-                    _ => todo_type!("generics"),
+                    _ => {
+                        println!("ZZZ tuple_ty: {tuple_ty:?}");
+                        todo_type!("generics")
+                    }
                 }
             }
         }
