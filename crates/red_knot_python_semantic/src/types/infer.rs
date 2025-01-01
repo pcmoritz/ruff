@@ -4963,20 +4963,20 @@ impl<'db> TypeInferenceBuilder<'db> {
                 println!("slice: {slice:?}");
                 let tuple_ty = self.infer_type_expression(slice);
                 println!("tuple_ty: {tuple_ty:?}");
-                match tuple_ty {
-                    Type::Tuple(tuple_ty) => {
-                        match value_ty {
-                            Type::ClassLiteral(class_literal) => {
-                                Type::ClassLiteral(ClassLiteralType::new(self.db(), class_literal.class(self.db()), tuple_ty.elements(self.db())))
-                            }
-                            _ => {
-                                println!("ZZZ value_ty: {value_ty:?}");
-                                todo_type!("generics")
-                            }
-                        }
+                let type_args = match tuple_ty {
+                    Type::Tuple(t) => {
+                        t.elements(self.db())
                     }
                     _ => {
-                        println!("ZZZ tuple_ty: {tuple_ty:?}");
+                        &vec![tuple_ty].into_boxed_slice()
+                    }
+                };
+                match value_ty {
+                    Type::ClassLiteral(class_literal) => {
+                        Type::ClassLiteral(ClassLiteralType::new(self.db(), class_literal.class(self.db()), type_args))
+                    }
+                    _ => {
+                        println!("ZZZ value_ty: {value_ty:?}");
                         todo_type!("generics")
                     }
                 }
