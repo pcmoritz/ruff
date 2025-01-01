@@ -4969,7 +4969,10 @@ impl<'db> TypeInferenceBuilder<'db> {
                             Type::ClassLiteral(class_literal) => {
                                 Type::ClassLiteral(ClassLiteralType::new(self.db(), class_literal.class(self.db()), tuple_ty.elements(self.db())))
                             }
-                            _ => todo_type!("generics"),
+                            _ => {
+                                println!("ZZZ value_ty: {value_ty:?}");
+                                todo_type!("generics"),
+                            }
                         }
                     }
                     _ => todo_type!("generics"),
