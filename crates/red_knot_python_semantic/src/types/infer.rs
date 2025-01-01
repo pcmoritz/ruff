@@ -4971,7 +4971,7 @@ impl<'db> TypeInferenceBuilder<'db> {
                             }
                             _ => {
                                 println!("ZZZ value_ty: {value_ty:?}");
-                                todo_type!("generics"),
+                                todo_type!("generics")
                             }
                         }
                     }
