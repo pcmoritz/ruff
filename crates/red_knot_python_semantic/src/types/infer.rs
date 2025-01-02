@@ -2673,7 +2673,9 @@ impl<'db> TypeInferenceBuilder<'db> {
             ctx: _,
         } = list;
 
-        let element_types: Vec<Type<'db>> = elts.iter().map(|elt| self.infer_expression(elt)).collect();
+        let element_types: Vec<Type<'db>> = elts.iter().map(
+            |elt| self.infer_expression(elt).to_meta_type(self.db()).to_instance(self.db())
+        ).collect();
 
         let element_ty = UnionType::from_elements(self.db(), element_types);
 
