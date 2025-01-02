@@ -2679,10 +2679,7 @@ impl<'db> TypeInferenceBuilder<'db> {
 
         let element_ty = UnionType::from_elements(self.db(), element_types);
 
-        println!("PPP element_ty: {element_ty:?}");
-
-        // TODO generic
-        KnownClass::List.to_instance(self.db())
+        Type::Instance(InstanceType::new(self.db(), KnownClass::List.to_class_literal(self.db()).into_class_literal().unwrap().class(self.db()), vec![element_ty].into_boxed_slice()))
     }
 
     fn infer_set_expression(&mut self, set: &ast::ExprSet) -> Type<'db> {
