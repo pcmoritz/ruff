@@ -2673,9 +2673,11 @@ impl<'db> TypeInferenceBuilder<'db> {
             ctx: _,
         } = list;
 
-        for elt in elts {
-            self.infer_expression(elt);
-        }
+        let element_types: Vec<Type<'db>> = elts.iter().map(|elt| self.infer_expression(elt)).collect();
+
+        let element_ty = UnionType::from_elements(self.db(), element_types);
+
+        println!("PPP element_ty: {element_ty:?}");
 
         // TODO generic
         KnownClass::List.to_instance(self.db())
